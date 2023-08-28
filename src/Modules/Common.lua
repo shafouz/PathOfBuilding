@@ -26,6 +26,11 @@ common.curl = require("lcurl.safe")
 common.xml = require("xml")
 common.base64 = require("base64")
 common.sha1 = require("sha1")
+common.inspect = require("inspect")
+
+function inspect(tbl)
+  return common.inspect.inspect(tbl)
+end
 
 -- Try to load a library return nil if failed. https://stackoverflow.com/questions/34965863/lua-require-fallback-error-handling
 function prerequire(...)

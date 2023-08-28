@@ -1633,6 +1633,15 @@ local function getUniqueItemTriggerName(skill)
 	end
 end
 
+local function logNoHandler(skillName, triggerName, uniqueName)
+  return function () end
+
+	-- local message = s_format("WARNING: no handler for: %s, %s, %s ", skillName, triggerName, uniqueName)
+	-- return function() 
+	-- 			ConPrintf(message) 
+	-- 		end
+end
+
 function calcs.triggers(env)
 	if not env.player.mainSkill.skillFlags.disable and not env.player.mainSkill.skillData.limitedProcessing then
 		local skillName = env.minion and env.minion.mainSkill.activeEffect.grantedEffect.name or env.player.mainSkill.activeEffect.grantedEffect.name
