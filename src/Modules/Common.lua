@@ -28,8 +28,19 @@ common.base64 = require("base64")
 common.sha1 = require("sha1")
 common.inspect = require("inspect")
 
-function inspect(tbl)
-  return common.inspect.inspect(tbl)
+function inspect(tbl, stdout)
+  local ignore_stdout = stdout or false
+  local data = common.inspect.inspect(tbl)
+  local file = io.open("console.txt", "w")
+
+  if file then
+    file:write(data .. "\n")
+    file:close()
+  end
+
+  if not ignore_stdout then
+    return data
+  end
 end
 
 -- Try to load a library return nil if failed. https://stackoverflow.com/questions/34965863/lua-require-fallback-error-handling
