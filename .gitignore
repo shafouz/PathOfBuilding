@@ -36,6 +36,5 @@ src/Data/TimelessJewelData/*.bin
 src/Data/*
 *.log
 
-lab.lua
-spec/System/TestNew_spec.lua
 src/console.txt
+*.json
