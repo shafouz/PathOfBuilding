@@ -364,15 +364,26 @@ Highest Weight - Displays the order retrieved from trade]]
 					self:SetNotice("Error while fetching league list: "..errMsg)
 					return
 				end
-				local sorted_leagues = { }
-				for _, league in ipairs(leagues) do
-					if league ~= "Standard" and league ~= "Hardcore" then
-						t_insert(sorted_leagues, league)
-					end
-				end
-				t_insert(sorted_leagues, "Standard")
-				t_insert(sorted_leagues, "Hardcore")
-				self.allLeagues[self.pbRealm] = sorted_leagues
+
+        local gamemodes = { "Hardcore", "Standard", "Solo Self%-Found", "Ruthless", "HC" }
+        for i, league in ipairs(leagues) do
+          local matched = false
+          for _, mode in pairs(gamemodes) do
+            local match = league:match("%f[%a]" .. mode .. "%f[%A]")
+
+            if match then
+              matched = true
+              break
+            end
+          end
+
+          if not matched then
+            leagues[1], leagues[i] = leagues[i], leagues[1]
+            break
+          end
+        end
+
+				self.allLeagues[self.pbRealm] = leagues
 				setLeagueDropList()
 			end)
 		end
