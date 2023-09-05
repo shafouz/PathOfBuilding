@@ -28,15 +28,37 @@ common.base64 = require("base64")
 common.sha1 = require("sha1")
 common.inspect = require("inspect")
 
+local stacktrace = io.open("stacktrace.txt", "a+")
+local console = io.open("console.txt", "a+")
+
+function printStackTrace()
+  local level = 1  -- Start at level 2 to skip this function
+
+  if not stacktrace then
+    print("Could not create a stacktrace")
+    return
+  end
+
+  while true do
+      local info = debug.getinfo(level, "nSl")
+      if not info then
+          break
+      end
+      stacktrace:write(string.format("Function: %s, Line: %d, Source: %s\n", info.name or "unknown", info.currentline, info.short_src))
+      level = level + 1
+  end
+end
+
 function inspect(tbl, stdout)
   local ignore_stdout = stdout or false
   local data = common.inspect.inspect(tbl)
-  local file = io.open("console.txt", "w")
 
-  if file then
-    file:write(data .. "\n")
-    file:close()
+  if not console then
+    print("Could not create a console")
+    return
   end
+
+  console:write(data .. "\n")
 
   if not ignore_stdout then
     return data

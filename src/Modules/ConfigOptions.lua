@@ -8,6 +8,14 @@ local m_min = math.min
 local m_max = math.max
 local s_format = string.format
 
+local function ay(build)
+  for key, value in pairs(build) do
+    print("DEBUGPRINT[10]: ConfigOptions.lua:13: key=" .. inspect(key))
+  end
+  -- local player = build.calcsTab.calcsEnv.player.output
+  -- return player.BuffList .. "\n" .. player.CurseList .. "\n" .. player.CombatList
+end
+
 local function applyPantheonDescription(tooltip, mode, index, value)
 	tooltip:Clear()
 	if value.val == "None" then
@@ -1929,4 +1937,10 @@ Huge sets the radius to 11.
 			end
 			return out
 		end},
+  -- my new section
+  -- { section = "Buffs", col = 1 },
+  -- {
+  --   var = "Buffs",
+  --   label = ay,
+  -- }
 }

@@ -1,26 +1,16 @@
 inspect = require("runtime/lua/inspect")
 dkjson = require("runtime/lua/dkjson")
 
-local json = io.open("./raw.json", "r"):read("a")
-local djson = dkjson.decode(json)
-
-local sorted = {}
-local reverse_order_index = 1
-for _, value in pairs(djson) do
-  if value.id:find("SSF") or value.id:find("Solo Self%-Found") then
-    goto continue
-  end
-
-  if not value.endAt then
-    if #sorted == 0 then
-      table.insert(sorted, 1, value.id)
-    else
-      table.insert(sorted, value.id)
-    end
-  else
-    table.insert(sorted, reverse_order_index, value.id)
-    reverse_order_index = reverse_order_index + 1
-  end
-
-  ::continue::
+local function tooltipFunc(modList, build)
+  print("DEBUGPRINT[11]: lab.lua:5: build=" .. inspect(build))
+  print("DEBUGPRINT[12]: lab.lua:6: modList=" .. inspect(modList))
+  return "something"
 end
+
+modList = "asdasd"
+build = "asdasdasdasd"
+
+local curTooltipText = type(tooltipFunc) == "string" and tooltipFunc or tooltipFunc(modList, build)
+print("DEBUGPRINT[10]: lab.lua:12: curTooltipText=" .. inspect(curTooltipText))
+
+					-- local curTooltipText = type(tooltipFunc) == "string" and tooltipFunc or tooltipFunc(self.modList, self.build)

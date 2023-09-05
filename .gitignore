@@ -35,6 +35,6 @@ src/Export/ggpk/*.dll
 src/Data/TimelessJewelData/*.bin
 src/Data/*
 *.log
-
-src/console.txt
+*.txt
 *.json
+*.md

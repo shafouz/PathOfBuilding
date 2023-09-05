@@ -33,94 +33,99 @@ local CalcsTabClass = newClass("CalcsTab", "UndoHandler", "ControlHost", "Contro
 	self.sectionList = { }
 
 	-- Special section for skill/mode selection
-	self:NewSection(3, "SkillSelect", 1, colorCodes.NORMAL, {{ defaultCollapsed = false, label = "View Skill Details", data = {
-		{ label = "Socket Group", { controlName = "mainSocketGroup", 
-			control = new("DropDownControl", nil, 0, 0, 300, 16, nil, function(index, value) 
-				self.input.skill_number = index
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end) {
-				tooltipFunc = function(tooltip, mode, index, value)
-					local socketGroup = self.build.skillsTab.socketGroupList[index]
-					if socketGroup and tooltip:CheckForUpdate(socketGroup, self.build.outputRevision) then
-						self.build.skillsTab:AddSocketGroupTooltip(tooltip, socketGroup)
-					end
-				end
-			}
-		}, },
-		{ label = "Active Skill", { controlName = "mainSkill", 
-			control = new("DropDownControl", nil, 0, 0, 300, 16, nil, function(index, value)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				mainSocketGroup.mainActiveSkillCalcs = index
-				self.build.buildFlag = true
-			end)
-		}, },
-		{ label = "Skill Part", playerFlag = "multiPart", { controlName = "mainSkillPart", 
-			control = new("DropDownControl", nil, 0, 0, 250, 16, nil, function(index, value)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
-				srcInstance.skillPartCalcs = index
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end)
-		}, },{ label = "Skill Stages", playerFlag = "multiStage", { controlName = "mainSkillStageCount",
-			control = new("EditControl", nil, 0, 0, 52, 16, nil, nil, "%D", nil, function(buf)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
-				srcInstance.skillStageCountCalcs = tonumber(buf)
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end)
-		}, },
-		{ label = "Active Mines", playerFlag = "mine", { controlName = "mainSkillMineCount",
-			control = new("EditControl", nil, 0, 0, 52, 16, nil, nil, "%D", nil, function(buf)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
-				srcInstance.skillMineCountCalcs = tonumber(buf)
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end)
-		}, },
-		{ label = "Show Minion Stats", flag = "haveMinion", { controlName = "showMinion", 
-			control = new("CheckBoxControl", nil, 0, 0, 18, nil, function(state)
-				self.input.showMinion = state
-				self:AddUndoState()
-			end, "Show stats for the minion instead of the player.")
-		}, },
-		{ label = "Minion", flag = "minion", { controlName = "mainSkillMinion",
-			control = new("DropDownControl", nil, 0, 0, 160, 16, nil, function(index, value)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
-				if value.itemSetId then
-					srcInstance.skillMinionItemSetCalcs = value.itemSetId
-				else
-					srcInstance.skillMinionCalcs = value.minionId
-				end
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end)
-		} },
-		{ label = "Spectre Library", flag = "spectre", { controlName = "mainSkillMinionLibrary",
-			control = new("ButtonControl", nil, 0, 0, 100, 16, "Manage Spectres...", function()
-				self.build:OpenSpectreLibrary()
-			end)
-		} },
-		{ label = "Minion Skill", flag = "haveMinion", { controlName = "mainSkillMinionSkill",
-			control = new("DropDownControl", nil, 0, 0, 200, 16, nil, function(index, value)
-				local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
-				local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
-				srcInstance.skillMinionSkillCalcs = index
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end)
-		} },
-		{ label = "Calculation Mode", { 
-			controlName = "mode", 
-			control = new("DropDownControl", nil, 0, 0, 100, 16, buffModeDropList, function(index, value) 
-				self.input.misc_buffMode = value.buffMode 
-				self:AddUndoState()
-				self.build.buildFlag = true
-			end, [[
+	self:NewSection(3, -- width
+    "SkillSelect", -- id
+    1, -- group
+    colorCodes.NORMAL, -- colour
+    -- subsection
+    {{ defaultCollapsed = false, label = "View Skill Details", data = {
+      { label = "Socket Group", { controlName = "mainSocketGroup", 
+        control = new("DropDownControl", nil, 0, 0, 300, 16, nil, function(index, value) 
+          self.input.skill_number = index
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end) {
+            tooltipFunc = function(tooltip, mode, index, value)
+              local socketGroup = self.build.skillsTab.socketGroupList[index]
+              if socketGroup and tooltip:CheckForUpdate(socketGroup, self.build.outputRevision) then
+                self.build.skillsTab:AddSocketGroupTooltip(tooltip, socketGroup)
+              end
+            end
+        }
+        }, },
+      { label = "Active Skill", { controlName = "mainSkill", 
+        control = new("DropDownControl", nil, 0, 0, 300, 16, nil, function(index, value)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          mainSocketGroup.mainActiveSkillCalcs = index
+          self.build.buildFlag = true
+        end)
+        }, },
+      { label = "Skill Part", playerFlag = "multiPart", { controlName = "mainSkillPart", 
+        control = new("DropDownControl", nil, 0, 0, 250, 16, nil, function(index, value)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
+          srcInstance.skillPartCalcs = index
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end)
+        }, },{ label = "Skill Stages", playerFlag = "multiStage", { controlName = "mainSkillStageCount",
+        control = new("EditControl", nil, 0, 0, 52, 16, nil, nil, "%D", nil, function(buf)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
+          srcInstance.skillStageCountCalcs = tonumber(buf)
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end)
+        }, },
+      { label = "Active Mines", playerFlag = "mine", { controlName = "mainSkillMineCount",
+        control = new("EditControl", nil, 0, 0, 52, 16, nil, nil, "%D", nil, function(buf)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
+          srcInstance.skillMineCountCalcs = tonumber(buf)
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end)
+        }, },
+      { label = "Show Minion Stats", flag = "haveMinion", { controlName = "showMinion", 
+        control = new("CheckBoxControl", nil, 0, 0, 18, nil, function(state)
+          self.input.showMinion = state
+          self:AddUndoState()
+          end, "Show stats for the minion instead of the player.")
+        }, },
+      { label = "Minion", flag = "minion", { controlName = "mainSkillMinion",
+        control = new("DropDownControl", nil, 0, 0, 160, 16, nil, function(index, value)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
+          if value.itemSetId then
+            srcInstance.skillMinionItemSetCalcs = value.itemSetId
+          else
+            srcInstance.skillMinionCalcs = value.minionId
+          end
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end)
+      } },
+      { label = "Spectre Library", flag = "spectre", { controlName = "mainSkillMinionLibrary",
+        control = new("ButtonControl", nil, 0, 0, 100, 16, "Manage Spectres...", function()
+          self.build:OpenSpectreLibrary()
+        end)
+      } },
+      { label = "Minion Skill", flag = "haveMinion", { controlName = "mainSkillMinionSkill",
+        control = new("DropDownControl", nil, 0, 0, 200, 16, nil, function(index, value)
+          local mainSocketGroup = self.build.skillsTab.socketGroupList[self.input.skill_number]
+          local srcInstance = mainSocketGroup.displaySkillListCalcs[mainSocketGroup.mainActiveSkillCalcs].activeEffect.srcInstance
+          srcInstance.skillMinionSkillCalcs = index
+          self:AddUndoState()
+          self.build.buildFlag = true
+        end)
+      } },
+      { label = "Calculation Mode", { 
+        controlName = "mode", 
+        control = new("DropDownControl", nil, 0, 0, 100, 16, buffModeDropList, function(index, value) 
+          self.input.misc_buffMode = value.buffMode 
+          self:AddUndoState()
+          self.build.buildFlag = true
+          end, [[
 This controls the calculation of the stats shown in this tab.
 The stats in the sidebar are always shown in Effective DPS mode, regardless of this setting.
 
@@ -128,15 +133,17 @@ Unbuffed: No auras, buffs, or other support skills or effects will apply. This i
 Buffed: Aura and buff skills apply. This is equivalent to standing in your hideout with auras and buffs turned on.
 In Combat: Charges and combat buffs such as Onslaught will also apply. This will show your character sheet stats in combat.
 Effective DPS: Curses and enemy properties (such as resistances and status conditions) will also apply. This estimates your true DPS.]]) 
-		}, },
-		{ label = "Aura and Buff Skills", flag = "buffs", textSize = 12, { format = "{output:BuffList}", { breakdown = "SkillBuffs" } }, },
-		{ label = "Combat Buffs", flag = "combat", textSize = 12, { format = "{output:CombatList}" }, },
-		{ label = "Curses and Debuffs", flag = "effective", textSize = 12, { format = "{output:CurseList}", { breakdown = "SkillDebuffs" } }, },
-	}}}, function(section)
-		self.build:RefreshSkillSelectControls(section.controls, self.input.skill_number, "Calcs")
-		section.controls.showMinion.state = self.input.showMinion
-		section.controls.mode:SelByValue(self.input.misc_buffMode, "buffMode")
-	end)
+        }, },
+      { label = "Aura and Buff Skills", flag = "buffs", textSize = 12, { format = "{output:BuffList}", { breakdown = "SkillBuffs" } }, },
+      { label = "Combat Buffs", flag = "combat", textSize = 12, { format = "{output:CombatList}" }, },
+      { label = "Curses and Debuffs", flag = "effective", textSize = 12, { format = "{output:CurseList}", { breakdown = "SkillDebuffs" } }, },
+    }}},
+    -- updateFunc
+    function(section)
+      self.build:RefreshSkillSelectControls(section.controls, self.input.skill_number, "Calcs")
+      section.controls.showMinion.state = self.input.showMinion
+      section.controls.mode:SelByValue(self.input.misc_buffMode, "buffMode")
+    end)
 
 	-- Add sections from the CalcSections module
 	local sectionData = LoadModule("Modules/CalcSections")

@@ -97,6 +97,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 			t_insert(self.controls, lastSection)
 		else
 			local control
+
 			if varData.type == "check" then
 				control = new("CheckBoxControl", {"TOPLEFT",lastSection,"TOPLEFT"}, 234, 0, 18, varData.label, function(state)
 					self.input[varData.var] = state
@@ -181,11 +182,13 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return "This option is specific to '"..self.build.spec.nodes[ifOption].dn.."'."
 				end))
 			end
+
 			if varData.ifOption then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifOption, function(ifOption)
 					return self.input[ifOption]
 				end))
 			end
+
 			if varData.ifCond then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifCond, function(ifOption)
 					if implyCond(varData) then
@@ -208,6 +211,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifMinionCond then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifMinionCond, function(ifOption)
 					if implyCond(varData) then
@@ -230,6 +234,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifEnemyCond then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifEnemyCond, function(ifOption)
 					if implyCond(varData) then
@@ -252,6 +257,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifMult then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifMult, function(ifOption)
 					if implyCond(varData) then
@@ -274,6 +280,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifEnemyMult then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifEnemyMult, function(ifOption)
 					if implyCond(varData) then
@@ -296,6 +303,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifStat then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifStat, function(ifOption)
 					if implyCond(varData) then
@@ -323,6 +331,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifEnemyStat then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifEnemyStat, function(ifOption)
 					if implyCond(varData) then
@@ -345,6 +354,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifTagType then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifTagType, function(ifOption)
 					if implyCond(varData) then
@@ -367,6 +377,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifFlag then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifFlag, function(ifOption)
 					local skillModList = self.build.calcsTab.mainEnv.player.mainSkill.skillModList
@@ -375,6 +386,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return skillFlags[ifOption] or skillModList:Flag(nil, ifOption)
 				end))
 			end
+
 			if varData.ifMod then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifMod, function(ifOption)
 					if implyCond(varData) then
@@ -397,11 +409,13 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return out
 				end))
 			end
+
 			if varData.ifSkill then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifSkill, function(ifOption)
 					return self.build.calcsTab.mainEnv.skillsUsed[ifOption]
 				end))
 			end
+
 			if varData.ifSkillFlag then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifSkillFlag, function(ifOption)
 					for _, activeSkill in ipairs(self.build.calcsTab.mainEnv.player.activeSkillList) do
@@ -412,6 +426,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return false
 				end))
 			end
+
 			if varData.ifSkillData then
 				t_insert(shownFuncs, listOrSingleIfOption(varData.ifSkillData, function(ifOption)
 					for _, activeSkill in ipairs(self.build.calcsTab.mainEnv.player.activeSkillList) do
@@ -422,24 +437,29 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					return false
 				end))
 			end
+
 			if varData.tooltipFunc then
 				control.tooltipFunc = varData.tooltipFunc
 			end
+
 			local labelControl = control
 			if varData.label and varData.type ~= "check" then
 				labelControl = new("LabelControl", {"RIGHT",control,"LEFT"}, -4, 0, 0, DrawStringWidth(14, "VAR", varData.label) > 228 and 12 or 14, "^7"..varData.label)
 				t_insert(self.controls, labelControl)
 			end
+
 			if varData.var then
 				self.input[varData.var] = varData.defaultState
 				control.state = varData.defaultState
 				self.varControls[varData.var] = control
 				self.placeholder[varData.var] = varData.defaultPlaceholderState
 				control.placeholder = varData.defaultPlaceholderState
+
 				if varData.defaultIndex then
 					self.input[varData.var] = varData.list[varData.defaultIndex].val
 					control.selIndex = varData.defaultIndex
 				end
+
 				if varData.type == "check" then
 					self.defaultState[varData.var] = varData.defaultState or false
 				elseif varData.type == "count" or varData.type == "integer" or varData.type == "countAllowZero" then
@@ -476,6 +496,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					local def = self:GetDefaultState(varData.var, type(cur))
 					return not shown and cur ~= nil and cur ~= def or shown
 				end
+
 				local innerLabel = labelControl.label
 				labelControl.label = function()
 					local shown = type(innerShown) == "boolean" and innerShown or innerShown()
@@ -486,6 +507,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 					end
 					return innerLabel
 				end
+
 				local innerTooltipFunc = control.tooltipFunc
 				control.tooltipFunc = function (tooltip, ...)
 					tooltip:Clear()
@@ -512,6 +534,7 @@ local ConfigTabClass = newClass("ConfigTab", "UndoHandler", "ControlHost", "Cont
 			t_insert(lastSection.varControlList, control)
 		end
 	end
+
 	self.controls.scrollBar = new("ScrollBarControl", {"TOPRIGHT",self,"TOPRIGHT"}, 0, 0, 18, 0, 50, "VERTICAL", true)
 end)
 
