@@ -762,9 +762,11 @@ function calcs.buildOutput(build, mode)
 				end
 			end
 		end
+
 		output.BuffList = table.concat(buffList, ", ")
 		output.CombatList = table.concat(combatList, ", ")
 		output.CurseList = table.concat(curseList, ", ")
+
 		if env.minion then
 			local buffList = { }
 			local combatList = { }
