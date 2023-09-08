@@ -1,4 +1,4 @@
---#@ SimpleGraphic
+#@ SimpleGraphic
 -- Path of Building
 --
 -- Module: Launch
